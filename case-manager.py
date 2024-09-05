@@ -245,13 +245,14 @@ def comenzar_caso(
 
 def finalizar_caso(id_caso, id_analista):
     cursor.execute(
-        f"UPDATE casos SET id_estatus = 2 AND finished_at = CURRENT_TIMESTAMP WHERE id_caso= {id_caso}"
+        f"UPDATE casos SET id_estatus = 2, finished_at = CURRENT_TIMESTAMP WHERE id_caso= {id_caso}"
     )
     connection.commit()
     cursor.execute(
         f"UPDATE analista SET id_disponibilidad = 1 WHERE id_analista = {id_analista}"
     )
-    return "Caso finalizado correctamente"
+    connection.commit()
+    print("Caso finalizado correctamente")
 
 
 def analistas_disponibles():
