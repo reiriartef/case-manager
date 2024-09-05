@@ -317,7 +317,7 @@ def menu():
         print("0. Salir")
 
         opcion = input("Ingrese el número de la opción: ")
-
+        os.system("cls")
         match opcion:
             case "1":
                 os.system("cls")
