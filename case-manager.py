@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from fpdf import FPDF
 
 # Conectar a la base de datos
 connection = sqlite3.connect("casos-oati.db")
@@ -306,6 +307,75 @@ def ver_dependencias():
     return dependencias
 
 
+def casos_hoy():
+    cursor.execute("""
+    SELECT 
+        casos.id_caso,
+        dependencias.nombre AS dependencia,
+        analista.nombre AS analista,
+        casos.descripcion,
+        estatus.nombre AS estatus,
+        casos.created_at,
+        casos.finished_at
+    FROM 
+        casos
+    INNER JOIN 
+        dependencias ON casos.id_dependencia = dependencias.id_dependencia
+    INNER JOIN 
+        analista ON casos.id_analista = analista.id_analista
+    INNER JOIN 
+        estatus ON casos.id_estatus = estatus.id_estatus
+    WHERE 
+        DATE(casos.created_at) = DATE(CURRENT_DATE)
+""")
+    connection.commit()
+    casos_hoy = cursor.fetchall()
+    return casos_hoy
+
+
+def generar_pdf(datos):
+    pdf = FPDF(orientation="P", unit="mm", format="Letter")
+    pdf.add_page()
+
+    # Logo
+    pdf.image(
+        "./logo.png", 10, 8, 33
+    )  # Cambia 'ruta_al_logo.png' por la ruta de tu logo
+
+    # Membrete
+    pdf.set_font("Arial", "B", 12)
+    pdf.cell(0, 10, "Oficina de Apoyo Técnico Informático Zulia", ln=True, align="C")
+
+    # Título centrado
+    pdf.set_font("Arial", "B", 16)
+    pdf.ln(20)  # Espacio antes del título
+    pdf.cell(0, 10, "Reporte de Casos del Día", ln=True, align="C")
+
+    # Espacio antes de la tabla
+    pdf.ln(10)
+
+    # Encabezados de la tabla
+    pdf.set_font("Arial", "B", 12)
+    pdf.cell(60, 10, "Dependencia", border=1, align="C")
+    pdf.cell(60, 10, "Analista Asignado", border=1, align="C")
+    pdf.cell(70, 10, "Descripción del Caso", border=1, ln=True, align="C")
+
+    # Contenido de la tabla
+    pdf.set_font("Arial", "", 8)
+    for fila in datos:
+        dependencia = fila[1]  # Nombre de la dependencia
+        analista = fila[2]  # Nombre del analista
+        descripcion = fila[3]  # Descripción del caso
+
+        pdf.cell(60, 10, dependencia, border=1, align="C")
+        pdf.cell(60, 10, analista, border=1, align="C")
+        pdf.cell(70, 10, descripcion, border=1, ln=True, align="C")
+
+    # Guardar el PDF
+    pdf.output("reporte_casos.pdf")
+    print("PDF con casos del día de hoy generado correctamente")
+
+
 def menu():
     while True:
         print("Seleccione una opción:")
@@ -314,6 +384,7 @@ def menu():
         print("3. Ver analistas disponibles")
         print("4. Ver casos en proceso")
         print("5. Ver casos finalizados")
+        print("6. Imprimir casos finalizados del día")
 
         print("0. Salir")
 
@@ -403,6 +474,9 @@ def menu():
                     print(
                         f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]}"
                     )
+            case "6":
+                casos = casos_hoy()
+                generar_pdf(casos)
             case "0":
                 print("Saliendo del programa...")
                 break
