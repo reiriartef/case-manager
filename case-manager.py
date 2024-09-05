@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from fpdf import FPDF
+import datetime
 
 # Conectar a la base de datos
 connection = sqlite3.connect("casos-oati.db")
@@ -241,7 +242,9 @@ def comenzar_caso(
     connection.commit()
 
     # Devolver o mostrar el ID del caso
+    print("------------------------------------------")
     print(f"El ID del caso generado es: {id_generado}")
+    print("------------------------------------------")
 
 
 def finalizar_caso(id_caso, id_analista):
@@ -253,7 +256,9 @@ def finalizar_caso(id_caso, id_analista):
         f"UPDATE analista SET id_disponibilidad = 1 WHERE id_analista = {id_analista}"
     )
     connection.commit()
+    print("-----------------------------")
     print("Caso finalizado correctamente")
+    print("-----------------------------")
 
 
 def analistas_disponibles():
@@ -349,7 +354,13 @@ def generar_pdf(datos):
     # Título centrado
     pdf.set_font("Arial", "B", 16)
     pdf.ln(20)  # Espacio antes del título
-    pdf.cell(0, 10, "Reporte de Casos del Día", ln=True, align="C")
+    pdf.cell(
+        0,
+        10,
+        f"Reporte de Casos del Día {datetime.datetime.today().strftime('%d/%m/%Y')}",
+        ln=True,
+        align="C",
+    )
 
     # Espacio antes de la tabla
     pdf.ln(10)
@@ -373,7 +384,9 @@ def generar_pdf(datos):
 
     # Guardar el PDF
     pdf.output("reporte_casos.pdf")
+    print("---------------------------------------------------")
     print("PDF con casos del día de hoy generado correctamente")
+    print("---------------------------------------------------")
 
 
 def menu():
