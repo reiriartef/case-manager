@@ -247,6 +247,13 @@ def comenzar_caso(
     print("------------------------------------------")
 
 
+def modificar_caso(id_caso, descripcion):
+    cursor.execute(
+        "UPDATE casos SET descripcion = ? WHERE id_caso = ?", (descripcion, id_caso)
+    )
+    connection.commit()
+
+
 def finalizar_caso(id_caso, id_analista):
     cursor.execute(
         f"UPDATE casos SET id_estatus = 2, finished_at = CURRENT_TIMESTAMP WHERE id_caso= {id_caso}"
@@ -393,11 +400,12 @@ def menu():
     while True:
         print("Seleccione una opción:")
         print("1. Agregar caso")
-        print("2. Finalizar caso")
-        print("3. Ver analistas disponibles")
-        print("4. Ver casos en proceso")
-        print("5. Ver casos finalizados")
-        print("6. Imprimir casos finalizados del día")
+        print("2. Modificar caso")
+        print("3. Finalizar caso")
+        print("4. Ver analistas disponibles")
+        print("5. Ver casos en proceso")
+        print("6. Ver casos finalizados")
+        print("7. Imprimir casos finalizados del día")
 
         print("0. Salir")
 
@@ -434,15 +442,51 @@ def menu():
                     descripcion_caso,
                 )
             case "2":
+                casos = casos_en_proceso()
+                print("\n--- Casos en proceso ---")
+
+                for caso in casos:
+                    fecha_hora_inicio_str = caso[5]
+
+                    # Convertir el string a un objeto datetime
+                    fecha_hora_inicio_obj = datetime.datetime.strptime(
+                        fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
+                    )
+
+                    # Formatear la hora a "%H:%M"
+                    hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
+
+                    print(
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}"
+                    )
+                caso_seleccionado = input(
+                    "Ingrese el ID del caso que desea modificar su descripcion: "
+                )
+                descripcion = input("Ingrese la nueva descripcion del caso: ")
+                modificar_caso(caso_seleccionado, descripcion)
+                print("----------------------------")
+                print("Caso modificado con éxito")
+                print("----------------------------")
+
+            case "3":
                 os.system("cls")
                 print("--- Finalizar casos en proceso ---")
                 casos = casos_en_proceso()
                 print("--- Casos en proceso ---")
                 for caso in casos:
-                    print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]}"
+                    fecha_hora_inicio_str = caso[5]
+
+                    # Convertir el string a un objeto datetime
+                    fecha_hora_inicio_obj = datetime.datetime.strptime(
+                        fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
                     )
-                print("\n")
+
+                    # Formatear la hora a "%H:%M"
+                    hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
+
+                    print(
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}"
+                    )
                 caso_seleccionado = input(
                     "Ingrese el ID del caso que desea finalizar: "
                 )
@@ -457,7 +501,7 @@ def menu():
                     "Ingrese el ID del analista asignado al caso que será marcado como finalizado: "
                 )
                 finalizar_caso(int(caso_seleccionado), int(analista_seleccionado))
-            case "3":
+            case "4":
                 os.system("cls")
                 analistas = analistas_disponibles()
                 print("\n--- Analistas disponibles ---")
@@ -467,27 +511,64 @@ def menu():
                     )
                 print("\n")
 
-            case "4":
+            case "5":
                 os.system("cls")
                 casos = casos_en_proceso()
                 print("\n--- Casos en proceso ---")
 
                 for caso in casos:
-                    print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]}"
-                    )
-                print("\n")
+                    fecha_hora_inicio_str = caso[5]
 
-            case "5":
+                    # Convertir el string a un objeto datetime
+                    fecha_hora_inicio_obj = datetime.datetime.strptime(
+                        fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
+                    )
+
+                    # Formatear la hora a "%H:%M"
+                    hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
+
+                    print(
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}"
+                    )
+
+            case "6":
                 os.system("cls")
                 print("\n--- Casos Finalizados ---")
-
                 casos = casos_finalizados()
                 for caso in casos:
-                    print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]}"
+                    fecha_hora_inicio_str = caso[5]
+
+                    # Convertir el string a un objeto datetime
+                    fecha_hora_inicio_obj = datetime.datetime.strptime(
+                        fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
                     )
-            case "6":
+
+                    # Formatear la hora a "%H:%M"
+                    hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
+
+                    fecha_hora_finalizacion_str = caso[6]
+
+                    # Convertir el string a un objeto datetime
+                    fecha_hora_finalizacion_obj = datetime.datetime.strptime(
+                        fecha_hora_finalizacion_str, "%Y-%m-%d %H:%M:%S"
+                    )
+
+                    # Formatear la hora a "%H:%M"
+                    hora_finalizacion_formateada = fecha_hora_finalizacion_obj.strftime(
+                        "%H:%M"
+                    )
+
+                    # Calcular la diferencia de tiempo (timedelta)
+                    diferencia = fecha_hora_finalizacion_obj - fecha_hora_inicio_obj
+
+                    # Convertir la diferencia en minutos
+                    diferencia_en_minutos = diferencia.total_seconds() / 60
+
+                    print(
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Hora de Inicio: {hora_inicio_formateada} - Hora de Finalización: {hora_finalizacion_formateada} - Duración del Caso: {diferencia_en_minutos} minutos"
+                    )
+            case "7":
+                os.system("cls")
                 casos = casos_hoy()
                 generar_pdf(casos)
             case "0":
