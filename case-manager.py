@@ -457,7 +457,7 @@ def menu():
                     hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
 
                     print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}"
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}\n"
                     )
                 caso_seleccionado = input(
                     "Ingrese el ID del caso que desea modificar su descripcion: "
@@ -485,7 +485,7 @@ def menu():
                     hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
 
                     print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}"
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}\n"
                     )
                 caso_seleccionado = input(
                     "Ingrese el ID del caso que desea finalizar: "
@@ -507,7 +507,7 @@ def menu():
                 print("\n--- Analistas disponibles ---")
                 for analista in analistas:
                     print(
-                        f"ID: {analista[0]} - Nombre: {analista[1]} - Especialidad: {analista[2]}"
+                        f"ID: {analista[0]} - Nombre: {analista[1]} - Especialidad: {analista[2]}\n"
                     )
                 print("\n")
 
@@ -528,7 +528,7 @@ def menu():
                     hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
 
                     print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}"
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}\n"
                     )
 
             case "6":
@@ -565,7 +565,7 @@ def menu():
                     diferencia_en_minutos = diferencia.total_seconds() / 60
 
                     print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Hora de Inicio: {hora_inicio_formateada} - Hora de Finalización: {hora_finalizacion_formateada} - Duración del Caso: {diferencia_en_minutos} minutos"
+                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Hora de Inicio: {hora_inicio_formateada} - Hora de Finalización: {hora_finalizacion_formateada} - Duración del Caso: {diferencia_en_minutos} minutos\n"
                     )
             case "7":
                 os.system("cls")
