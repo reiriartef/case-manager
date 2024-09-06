@@ -415,92 +415,112 @@ def menu():
             case "1":
                 os.system("cls")
                 print("--- Agregar un nuevo caso ---")
-                dependencias = ver_dependencias()
-                print("--- Dependencias ---")
-                for dependencia in dependencias:
-                    print(f"ID: {dependencia[0]} - Nombre: {dependencia[1]}")
-                print("\n")
-                depencencia_seleccionada = input(
-                    "Ingrese el ID de la dependencia que está solicitando apoyo: "
-                )
-                analistas = analistas_disponibles()
-                print("\n--- Analistas disponibles ---")
-                for analista in analistas:
-                    print(
-                        f"ID: {analista[0]} - Nombre: {analista[1]} - Especialidad: {analista[2]}"
+                while True:
+                    dependencias = ver_dependencias()
+                    print("--- Dependencias ---")
+                    for dependencia in dependencias:
+                        print(f"ID: {dependencia[0]} - Nombre: {dependencia[1]}")
+                    print("\n")
+                    depencencia_seleccionada = input(
+                        "Ingrese el ID de la dependencia que está solicitando apoyo: "
                     )
-                print("\n")
-                analista_seleccionado = input(
-                    "Ingrese el ID del analista que será asignado para atender el caso: "
-                )
-                descripcion_caso = input(
-                    "Ingrese una breve descripcion del caso que será atendido por el analista: "
-                )
-                comenzar_caso(
-                    int(depencencia_seleccionada),
-                    int(analista_seleccionado),
-                    descripcion_caso,
-                )
+                    if depencencia_seleccionada == "0":
+                        break
+                    analistas = analistas_disponibles()
+                    print("\n--- Analistas disponibles ---")
+                    for analista in analistas:
+                        print(
+                            f"ID: {analista[0]} - Nombre: {analista[1]} - Especialidad: {analista[2]}"
+                        )
+                    print("\n")
+                    analista_seleccionado = input(
+                        "Ingrese el ID del analista que será asignado para atender el caso: "
+                    )
+                    if analista_seleccionado == "0":
+                        break
+                    descripcion_caso = input(
+                        "Ingrese una breve descripcion del caso que será atendido por el analista: "
+                    )
+                    if descripcion_caso == "0":
+                        break
+                    comenzar_caso(
+                        int(depencencia_seleccionada),
+                        int(analista_seleccionado),
+                        descripcion_caso,
+                    )
             case "2":
-                casos = casos_en_proceso()
-                print("\n--- Casos en proceso ---")
+                os.system("cls")
+                print("--- Modificar Caso ---")
+                while True:
+                    casos = casos_en_proceso()
+                    print("\n--- Casos en proceso ---")
 
-                for caso in casos:
-                    fecha_hora_inicio_str = caso[5]
+                    for caso in casos:
+                        fecha_hora_inicio_str = caso[5]
 
-                    # Convertir el string a un objeto datetime
-                    fecha_hora_inicio_obj = datetime.datetime.strptime(
-                        fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
+                        # Convertir el string a un objeto datetime
+                        fecha_hora_inicio_obj = datetime.datetime.strptime(
+                            fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
+                        )
+
+                        # Formatear la hora a "%H:%M"
+                        hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
+
+                        print(
+                            f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}\n"
+                        )
+                    caso_seleccionado = input(
+                        "Ingrese el ID del caso que desea modificar su descripcion: "
                     )
-
-                    # Formatear la hora a "%H:%M"
-                    hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
-
-                    print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}\n"
-                    )
-                caso_seleccionado = input(
-                    "Ingrese el ID del caso que desea modificar su descripcion: "
-                )
-                descripcion = input("Ingrese la nueva descripcion del caso: ")
-                modificar_caso(caso_seleccionado, descripcion)
-                print("----------------------------")
-                print("Caso modificado con éxito")
-                print("----------------------------")
+                    if caso_seleccionado == "0":
+                        break
+                    descripcion = input("Ingrese la nueva descripcion del caso: ")
+                    if descripcion == "0":
+                        break
+                    modificar_caso(caso_seleccionado, descripcion)
+                    print("----------------------------")
+                    print("Caso modificado con éxito")
+                    print("----------------------------")
 
             case "3":
                 os.system("cls")
                 print("--- Finalizar casos en proceso ---")
-                casos = casos_en_proceso()
-                print("--- Casos en proceso ---")
-                for caso in casos:
-                    fecha_hora_inicio_str = caso[5]
+                while True:
+                    casos = casos_en_proceso()
+                    print("--- Casos en proceso ---")
+                    for caso in casos:
+                        fecha_hora_inicio_str = caso[5]
 
-                    # Convertir el string a un objeto datetime
-                    fecha_hora_inicio_obj = datetime.datetime.strptime(
-                        fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
+                        # Convertir el string a un objeto datetime
+                        fecha_hora_inicio_obj = datetime.datetime.strptime(
+                            fecha_hora_inicio_str, "%Y-%m-%d %H:%M:%S"
+                        )
+
+                        # Formatear la hora a "%H:%M"
+                        hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
+
+                        print(
+                            f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}\n"
+                        )
+                    caso_seleccionado = input(
+                        "Ingrese el ID del caso que desea finalizar: "
                     )
 
-                    # Formatear la hora a "%H:%M"
-                    hora_inicio_formateada = fecha_hora_inicio_obj.strftime("%H:%M")
-
-                    print(
-                        f"ID: {caso[0]} - Dependencia: {caso[1]} - Analista asignado: {caso[2]} - Descripcion: {caso[3]} - Hora de Inicio: {hora_inicio_formateada}\n"
+                    if caso_seleccionado == "0":
+                        break
+                    print("--- Analistas en casos ---")
+                    analistas = analistas_no_disponibles()
+                    for analista in analistas:
+                        print(
+                            f"ID: {analista[0]} - Nombre: {analista[1]} - Especialidad: {analista[2]}"
+                        )
+                    print("\n")
+                    analista_seleccionado = input(
+                        "Ingrese el ID del analista asignado al caso que será marcado como finalizado: "
                     )
-                caso_seleccionado = input(
-                    "Ingrese el ID del caso que desea finalizar: "
-                )
-                print("--- Analistas en casos ---")
-                analistas = analistas_no_disponibles()
-                for analista in analistas:
-                    print(
-                        f"ID: {analista[0]} - Nombre: {analista[1]} - Especialidad: {analista[2]}"
-                    )
-                print("\n")
-                analista_seleccionado = input(
-                    "Ingrese el ID del analista asignado al caso que será marcado como finalizado: "
-                )
-                finalizar_caso(int(caso_seleccionado), int(analista_seleccionado))
+                    if analista_seleccionado == "0":
+                        break
+                    finalizar_caso(int(caso_seleccionado), int(analista_seleccionado))
             case "4":
                 os.system("cls")
                 analistas = analistas_disponibles()
